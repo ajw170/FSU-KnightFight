@@ -10,96 +10,111 @@ public class KnightDriver {
 
     public static void main(String[] args) {
 
-        System.out.println("Welcome to Knight Fight!");
-        System.out.println("========================");
-        System.out.println(); //extra line
+        while(true) {
+            System.out.println("Welcome to Knight Fight!");
+            System.out.println("========================");
+            System.out.println(); //extra line
 
-        Knight playerKnight = enterCustomKnight();
+            Knight playerKnight = enterCustomKnight();
 
-        //Now ask the player if the opponent should be randomly generated.
-        //If yes, use default knight constructor.  If no, repeat ask process.
-        Scanner input = new Scanner(System.in);
-        System.out.print("Would you like to auto-generate your opponent? (y|n): ");
-        char opponentGen = input.next().charAt(0);
+            //Now ask the player if the opponent should be randomly generated.
+            //If yes, use default knight constructor.  If no, repeat ask process.
+            Scanner input = new Scanner(System.in);
+            System.out.print("Would you like to auto-generate your opponent? (y|n): ");
+            char opponentGen = input.next().charAt(0);
+            System.out.print("\n");
 
-        //exits program if y or n is not entered
-        if (opponentGen != 'y' && opponentGen != 'n' && opponentGen != 'Y' && opponentGen != 'N')
-        {
-            System.out.println("Invalid response.  Exiting.");
-            System.exit(0);
+            //exits program if y or n is not entered
+            if (opponentGen != 'y' && opponentGen != 'n' && opponentGen != 'Y' && opponentGen != 'N') {
+                System.out.println("Invalid response.  Exiting.");
+                System.exit(0);
+            }
+
+            //create reference to opponent Knight
+            Knight opponentKnight;
+
+            //assign the opponent Knight reference to a valid knight
+            switch (opponentGen) {
+                case 'Y':
+                case 'y':
+                    opponentKnight = new Knight(); //assigns random attributes
+                    break;
+                default:
+                    opponentKnight = enterCustomKnight();
+            }
+
+            //Now we have both Knights established; begin the battle!
+            //Determine which player goes first, either 0 (Player) or 1 (Opponent)
+            //Then, display the initial attributes in order
+            //Then begin battle!
+            SecureRandom random = new SecureRandom();
+            int whoGoes = random.nextInt(2); //result is either 0 or 1
+            Knight winningKnight;
+
+            System.out.println("Here are our illustrious Knights:");
+            System.out.print(playerKnight.toString());
+            System.out.print(opponentKnight.toString());
+            System.out.print("Press any key to start OR press N to quit: ");
+            String readGo = input.next();
+            System.out.println();
+            if (readGo.equals("N") || readGo.equals("n")) {
+                System.out.println("Thanks for using KnightFight!");
+                System.exit(0);
+            }
+
+            if (whoGoes == 0) //player goes first
+            {
+                System.out.println("The order has been decided! " + playerKnight.getName() + " will go first!\n");
+                System.out.println("\nLet the battle begin!\n");
+                winningKnight = fightKnights(playerKnight, opponentKnight);
+            } else //opponent goes first
+            {
+                System.out.println("The order has been decided! " + opponentKnight.getName() + " will go first!\n");
+                System.out.println("\nLet the battle begin!\n");
+                winningKnight = fightKnights(opponentKnight, playerKnight);
+            }
+
+            //Display winner
+            System.out.printf("%nAnd the winner is...%s!%n%n%n", winningKnight.getName());
         }
-
-        //create reference to opponent Knight
-        Knight opponentKnight;
-
-        //assign the opponent Knight reference to a valid knight
-        switch (opponentGen)
-        {
-            case 'Y':
-            case 'y':
-                opponentKnight = new Knight(); //assigns random attributes
-                break;
-            default:
-                opponentKnight = enterCustomKnight();
-        }
-
-        //Now we have both Knights established; begin the battle!
-        //Determine which player goes first, either 0 (Player) or 1 (Opponent)
-        SecureRandom random = new SecureRandom();
-        int whoGoes = random.nextInt(2); //result is either 0 or 1
-        Knight winningKnight;
-
-        if (whoGoes == 0) //player goes first
-        {
-            winningKnight = fightKnights(playerKnight,opponentKnight);
-        }
-        else //opponent goes first
-        {
-            winningKnight = fightKnights(opponentKnight,playerKnight);
-        }
-
-
-
-
-
-
     } //end main
 
     //allows the knights to fight back and forth until one is declared the winner, returns
     //the winning night
     private static Knight fightKnights (Knight knight1, Knight knight2)
     {
+        int counter = 1;
         //continue looping until a winning knight is returned
         while (true)
         {
+            System.out.println("\nRound " + counter + ": " + knight1.getName() + " is attacking " + knight2.getName() + "!");
             //Knight 1 fights Knight 2
             knight1.fight(knight2);
             //did knight 1 win?
             if (knight2.getHitPoints() <= 0) {
                 //display attributes and return winner
-                System.out.printf("%s%n%n%s", knight1.toString(), knight2.toString());
+                System.out.printf("%s%s", knight1.toString(), knight2.toString());
                 return knight1;
 
             }
+            System.out.printf("%s%s", knight1.toString(), knight2.toString());
+            ++counter;
 
+            System.out.println("\nRound " + counter + ": " + knight2.getName() + " is attacking " + knight1.getName() + "!");
             //Knight 2 fights Knight 1
             knight2.fight(knight1);
             //did knight 2 win?
             if (knight1.getHitPoints() <= 0) {
                 //display attributes and return winner
-                System.out.printf("%s%n%n%s", knight1.toString(), knight2.toString());
+                System.out.printf("%s%s", knight1.toString(), knight2.toString());
                 return knight2;
             }
-
             //Neither has won yet, so display atributes of both
-           
-
-
+            System.out.printf("%s%s", knight1.toString(), knight2.toString());
+            ++counter;
         }
+
     }
-
-
-
 
     private static Knight enterCustomKnight()
     {
@@ -112,7 +127,7 @@ public class KnightDriver {
         Scanner input = new Scanner(System.in);
 
         System.out.print("Enter the name of the Knight: ");
-        String name = input.next();
+        String name = input.nextLine();
 
         System.out.println("Now select the weapon! (Choose Number)");
         System.out.println("1) Long Sword");
@@ -131,6 +146,7 @@ public class KnightDriver {
             System.out.printf("Exception while choosing weapon: %s%n",e);
             System.exit(0);  //abandon program
         }
+        System.out.print("\n");
 
         System.out.println("Now select the armor! (Choose Number)");
         System.out.println("1) Metal");
@@ -149,6 +165,7 @@ public class KnightDriver {
             System.out.printf("Exception while choosing armor: %s%n",e);
             System.exit(0);
         }
+        System.out.print("\n");
 
         //parse to determine weapon type
         switch(weaponChoice)
@@ -170,7 +187,6 @@ public class KnightDriver {
                 System.exit(0);
                 break;
         } //end weapon choice
-
 
         //Parse to determine armor type
         switch(armorChoice)

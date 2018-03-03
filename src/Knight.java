@@ -32,16 +32,18 @@ public class Knight
     public enum WeaponType
     {
         //Modify damage by strength of weapons
-        LONG_SWORD(1.0),
-        BATTLE_AXE(1.2),
-        SPEAR(0.9),
-        WAR_HAMMER(1.8);
+        LONG_SWORD("Long Sword",1.0),
+        BATTLE_AXE("Battle Axe",1.2),
+        SPEAR("Spear",0.9),
+        WAR_HAMMER("War Hammer",1.8);
 
         private double damageModifier;
+        private String prettyName;
 
         //constructor
-        WeaponType(double damage)
+        WeaponType(String prettyName, double damage)
         {
+            this.prettyName = prettyName;
             this.damageModifier = damage;
         }
 
@@ -49,28 +51,40 @@ public class Knight
         {
             return this.damageModifier;
         }
+
+        private String getPrettyName()
+        {
+            return this.prettyName;
+        }
     }
 
     //create ArmorType class that enumerates the armor type
     //implicitly static and final by rule of enums
     public enum ArmorType
     {
-        METAL(1.0),
-        LEATHER(0.7),
-        TITANIUM(1.6),
-        UNOBTANIUM(2.2);
+        METAL("Metal",1.0),
+        LEATHER("Leather",0.7),
+        TITANIUM("Titanium",1.6),
+        UNOBTANIUM("Unobtanium",2.2);
 
+        private String prettyName;
         private double defenseModifier;
 
         //constructor
-        ArmorType(double defense)
+        ArmorType(String prettyName, double defense)
         {
+            this.prettyName = prettyName;
             this.defenseModifier = defense;
         }
 
         private double getDefenseModifier()
         {
             return this.defenseModifier;
+        }
+
+        private String getPrettyName()
+        {
+            return this.prettyName;
         }
     }
 
@@ -84,7 +98,8 @@ public class Knight
     private ArmorType armor;
     private int hitPoints;
     private int lastHit;
-    private final int HIT_POINTS_MAX = 100;
+    private final int HIT_POINTS_ADDL = 20;
+    private final int HIT_POINTS_MIN = 80;
 
     //default constructor when no arguments are passed
     public Knight ()
@@ -102,7 +117,7 @@ public class Knight
         int nameSelect = random.nextInt(defaultNames.length);
         this.name = defaultNames[nameSelect];
 
-        this.hitPoints = random.nextInt(HIT_POINTS_MAX);
+        this.hitPoints = HIT_POINTS_MIN + random.nextInt(HIT_POINTS_ADDL);
         this.lastHit = 0; //always starts with 0
 
     }
@@ -117,7 +132,7 @@ public class Knight
         this.name = name;
 
         //user cannot choose the initial HitPoints as per specification
-        this.hitPoints = random.nextInt(HIT_POINTS_MAX);
+        this.hitPoints = HIT_POINTS_MIN + random.nextInt(HIT_POINTS_ADDL);
         this.lastHit = 0; //always starts with 0
     }
 
@@ -187,9 +202,9 @@ public class Knight
         s       += "=================\n";
         s       += "Name: " + this.getName() + "\n";
         s       += "Hit Points: " + this.getHitPoints() + "\n";
-        s       += "Weapon Type: " + this.getWeaponType() + "\n";
-        s       += "Armor Type: " + this.getArmorType() + "\n";
-        s       += "Last Hit Damage: " + this.getLastHit();
+        s       += "Weapon Type: " + this.getWeaponType().getPrettyName() + "\n";
+        s       += "Armor Type: " + this.getArmorType().getPrettyName() + "\n";
+        s       += "Last Hit Damage: " + this.getLastHit() + "\n\n";
         return s;
     }
 
@@ -215,6 +230,8 @@ public class Knight
 
         //assign last hit to hitPointsReduce of the knight being fought
         knight.setLastHit(hitPointsReduce);
+        //this is the fighting knight, so set Last Hit to 0
+        this.setLastHit(0);
 
         //calculates the new value for the knight's hitpoints
         int newHitPoints = knight.getHitPoints() - hitPointsReduce;
