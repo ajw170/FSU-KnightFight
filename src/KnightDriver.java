@@ -75,7 +75,7 @@ public class KnightDriver {
             }
 
             //Display winner
-            System.out.printf("%nAnd the winner is...%s!%n%n%n", winningKnight.getName());
+            System.out.printf("%nAnd the winner is...%s!%n%n", winningKnight.getName());
         }
     } //end main
 
