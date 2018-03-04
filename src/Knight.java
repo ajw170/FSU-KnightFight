@@ -37,8 +37,8 @@ public class Knight
         SPEAR("Spear",0.9),
         WAR_HAMMER("War Hammer",1.8);
 
-        private double damageModifier;
-        private String prettyName;
+        private final double damageModifier;
+        private final String prettyName;
 
         //constructor
         WeaponType(String prettyName, double damage)
@@ -67,8 +67,8 @@ public class Knight
         TITANIUM("Titanium",1.6),
         UNOBTANIUM("Unobtanium",2.2);
 
-        private String prettyName;
-        private double defenseModifier;
+        private final String prettyName;
+        private final double defenseModifier;
 
         //constructor
         ArmorType(String prettyName, double defense)
