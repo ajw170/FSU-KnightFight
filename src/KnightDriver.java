@@ -10,7 +10,11 @@ public class KnightDriver {
 
     public static void main(String[] args) {
 
-        while(true) {
+        final char EXIT_LOWER = 'x';
+        final char EXIT_UPPER = 'X';
+        char exitFlag = '0';
+
+        while(exitFlag != EXIT_LOWER && exitFlag != EXIT_UPPER) {
             System.out.println("Welcome to Knight Fight!");
             System.out.println("========================");
             System.out.println(); //extra line
@@ -75,8 +79,12 @@ public class KnightDriver {
             }
 
             //Display winner
-            System.out.printf("%nAnd the winner is...%s!%n%n", winningKnight.getName());
-        }
+            System.out.printf("%nAnd the winner is...%s!%n", winningKnight.getName());
+            //Ask if they'd like to play again?
+            System.out.print("Press any key to play again (or press X to exit): ");
+            exitFlag = input.next().charAt(0);
+        } //end while
+        System.out.println("Thanks for playing KnightFight!");
     } //end main
 
     //allows the knights to fight back and forth until one is declared the winner, returns
